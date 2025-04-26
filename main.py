@@ -1,9 +1,27 @@
-from fastapi import FastAPI, Depends
-from sqlalchemy.orm.attributes import flag_modified 
+from fastapi import FastAPI, Depends, Security, HTTPException, status
+from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
+import dotenv
+import os
 import database as db
 
-app = FastAPI()
+dotenv.load_dotenv(dotenv.find_dotenv())
+
+apiKey = os.environ.get('API_KEY')
+
+apiKeyHeader = APIKeyHeader(name="x-api-key")
+async def authorize(key: str = Security(apiKeyHeader)):
+    if key != apiKey :
+        raise HTTPException(
+            status_code = status.HTTP_401_UNAUTHORIZED,
+            detail = "Missing or invalid API key"
+        )
+
+app = FastAPI(
+    dependencies=[
+        Depends(authorize),
+    ]
+)
 
 @app.post("/pet_data")
 def update_data(data: db.UpdateDataModel, database: Session = Depends(db.getDatabase)):
