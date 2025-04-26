@@ -1,0 +1,4 @@
+source .venv/Scripts/activate
+fastapi dev main.py
+docker build -t money-simulator-api .
+docker run -d --name money-simulator-api -p 80:80 money-simulator-api
