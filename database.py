@@ -19,6 +19,7 @@ def getDatabase():
 class PetDataModel(BaseModel):
     id: str
     count: int
+    baseValue: int
     transactions: list[Annotated[int, Field(strict=True, gt=0)]]
 
 class UpdateDataModel(BaseModel):
@@ -30,6 +31,7 @@ class PetData(Base):
     id = sa.Column(sa.String, primary_key=True)
     count = sa.Column(sa.Integer, default=0)
     value = sa.Column(sa.Integer, default=0)
+    baseValue = sa.Column(sa.Integer, default=0)
     transactions = sa.Column(sa.JSON, default=[])
 
 Base.metadata.create_all(bind=engine)

@@ -31,6 +31,7 @@ def update_data(data: db.UpdateDataModel, database: Session = Depends(db.getData
             petData = db.PetData(id = newPetData.id)
             database.add(petData)
 
+        petData.baseValue = newPetData.baseValue
         petData.count += newPetData.count
 
         newTransactions = petData.transactions.copy()
