@@ -9,7 +9,7 @@ dotenv.load_dotenv(dotenv.find_dotenv())
 
 apiKey = os.environ.get('API_KEY')
 
-apiKeyHeader = APIKeyHeader(name="x-api-key")
+apiKeyHeader = APIKeyHeader(name="key")
 async def authorize(key: str = Security(apiKeyHeader)):
     if key != apiKey :
         raise HTTPException(
