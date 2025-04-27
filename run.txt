@@ -1,1 +1,2 @@
+uvicorn main:app --port 80
 fastapi dev main.py

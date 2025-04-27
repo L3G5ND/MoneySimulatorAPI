@@ -29,7 +29,8 @@ def update_data(data: db.UpdateDataModel, database: Session = Depends(db.getData
         petData = database.query(db.PetData).filter(db.PetData.id == newPetData.id).one_or_none()
         if petData is None:
             petData = db.PetData(id = newPetData.id)
-            petData.transactions = [newPetData.baseValue]
+            if newPetData.baseValue > 0:
+                petData.transactions = [newPetData.baseValue]
             database.add(petData)
 
         petData.baseValue = newPetData.baseValue
