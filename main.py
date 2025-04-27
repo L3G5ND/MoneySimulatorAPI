@@ -23,34 +23,6 @@ app = FastAPI(
     ]
 )
 
-@app.middleware('http')
-async def encodeJSONData(request: Request, next):
-    #print(await request.body())
-    # update request headers
-    #headers = dict(request.scope['headers'])
-    #headers[b'custom-header'] = b'my custom header'
-    #request.scope['headers'] = [(k, v) for k, v in headers.items()]
-    
-    # update request query parameters
-    #q_params = dict(request.query_params)
-    #q_params['custom-q-param'] = 'my custom query param'
-    #request.scope['query_string'] = urlencode(q_params).encode('utf-8')
-        
-    return await next(request)
-
-import json
-from pydantic import BaseModel
-class Payload(BaseModel):
-    data: str
-
-@app.post("/test")
-def test(payload: Payload):
-    print(payload, type(payload))
-    payload = payload.model_dump()
-    print(payload, type(payload))
-    assert db.UpdateDataModel(data = payload)
-    #return x
-
 @app.post("/pet_data")
 def update_data(data: db.UpdateDataModel, database: Session = Depends(db.getDatabase)):
     for newPetData in data.data:
