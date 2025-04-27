@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, Security, HTTPException, status
+from fastapi import FastAPI, Depends, Security, Request, HTTPException, status
 from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
 import dotenv
@@ -23,8 +23,23 @@ app = FastAPI(
     ]
 )
 
+@app.middleware('http')
+async def encodeJSONData(request: Request, next):
+    print(await request.body())
+    # update request headers
+    #headers = dict(request.scope['headers'])
+    #headers[b'custom-header'] = b'my custom header'
+    #request.scope['headers'] = [(k, v) for k, v in headers.items()]
+    
+    # update request query parameters
+    #q_params = dict(request.query_params)
+    #q_params['custom-q-param'] = 'my custom query param'
+    #request.scope['query_string'] = urlencode(q_params).encode('utf-8')
+        
+    return await next(request)
+
 @app.post("/pet_data")
-def update_data(data: db.UpdateDataModel, database: Session = Depends(db.getDatabase)):
+def update_data(data, database: Session = Depends(db.getDatabase)):
     for newPetData in data.data:
         petData = database.query(db.PetData).filter(db.PetData.id == newPetData.id).one_or_none()
         if petData is None:
