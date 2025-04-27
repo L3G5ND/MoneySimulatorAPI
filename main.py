@@ -25,7 +25,7 @@ app = FastAPI(
 
 @app.middleware('http')
 async def encodeJSONData(request: Request, next):
-    print(await request.body())
+    #print(await request.body())
     # update request headers
     #headers = dict(request.scope['headers'])
     #headers[b'custom-header'] = b'my custom header'
@@ -38,8 +38,21 @@ async def encodeJSONData(request: Request, next):
         
     return await next(request)
 
+import json
+from pydantic import BaseModel
+class Payload(BaseModel):
+    data: str
+
+@app.post("/test")
+def test(payload: Payload):
+    print(payload, type(payload))
+    payload = payload.model_dump()
+    print(payload, type(payload))
+    assert db.UpdateDataModel(data = payload)
+    #return x
+
 @app.post("/pet_data")
-def update_data(data, database: Session = Depends(db.getDatabase)):
+def update_data(data: db.UpdateDataModel, database: Session = Depends(db.getDatabase)):
     for newPetData in data.data:
         petData = database.query(db.PetData).filter(db.PetData.id == newPetData.id).one_or_none()
         if petData is None:
