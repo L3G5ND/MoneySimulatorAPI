@@ -9,7 +9,7 @@ import os
 dotenv.load_dotenv(dotenv.find_dotenv())
 
 dbURI = os.environ.get('DB_URI')
-
+print(dbURI)
 engine = sa.create_engine(dbURI, connect_args={"check_same_thread": False})
 Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
