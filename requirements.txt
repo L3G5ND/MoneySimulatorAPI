@@ -1,5 +1,6 @@
 fastapi[standard]
 SQLAlchemy
 sqlalchemy-utils
+mysql-connector-python
 pydantic
 python-dotenv
