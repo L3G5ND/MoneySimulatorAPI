@@ -34,7 +34,7 @@ class UpdateDataModel(BaseModel):
 class PetData(Base):
     __tablename__ = 'PetData'
 
-    id = sa.Column(sa.String, primary_key=True)
+    id = sa.Column(sa.String(50), primary_key=True)
     count = sa.Column(sa.Integer, default=0)
     value = sa.Column(sa.Integer, default=0)
     baseValue = sa.Column(sa.Integer, default=0)
