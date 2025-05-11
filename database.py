@@ -3,8 +3,14 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy_utils import force_instant_defaults
 from pydantic import BaseModel, Field
 from typing import Annotated
+import dotenv
+import os
 
-engine = sa.create_engine("sqlite:////mnt/data.db", connect_args={"check_same_thread": False})
+dotenv.load_dotenv(dotenv.find_dotenv())
+
+dbURI = os.environ.get('DB_URI')
+
+engine = sa.create_engine(dbURI, connect_args={"check_same_thread": False})
 Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 force_instant_defaults()
