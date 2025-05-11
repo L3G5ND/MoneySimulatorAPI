@@ -4,7 +4,7 @@ from sqlalchemy_utils import force_instant_defaults
 from pydantic import BaseModel, Field
 from typing import Annotated
 
-engine = sa.create_engine("sqlite:///data.db", connect_args={"check_same_thread": False})
+engine = sa.create_engine("sqlite:////mnt/data.db", connect_args={"check_same_thread": False})
 Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 force_instant_defaults()
