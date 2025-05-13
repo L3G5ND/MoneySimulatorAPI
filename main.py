@@ -48,7 +48,7 @@ def update_data(data: db.UpdateDataModel, database: Session = Depends(db.getData
             for sellPrice in petData.transactions:
                 newValue += sellPrice
             newValue /= len(petData.transactions)
-            petData.value = round(newValue)
+            petData.value = newValue
 
     database.commit()
    
