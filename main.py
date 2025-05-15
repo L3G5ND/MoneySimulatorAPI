@@ -37,7 +37,7 @@ def update_data(data: db.UpdateDataModel, database: Session = Depends(db.getData
         petData.count += newPetData.count
 
         newTransactions = petData.transactions.copy()
-        for i in range(len(newTransactions)-100):
+        for i in range(len(newTransactions)+1-100):
             newTransactions.pop(i)
         for sellPrice in newPetData.transactions:
             newTransactions.append(sellPrice)
