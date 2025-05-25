@@ -40,8 +40,9 @@ def update_data(data: db.UpdateDataModel, database: Session = Depends(db.getData
 
         for i in range(len(newTransactions)+1-100):
             newTransactions.pop(0)
+        maxTransactionValue = (petData.value > 0) and (petData.value * 1.2) or float('inf')
         for sellPrice in newPetData.transactions:
-            newTransactions.append(sellPrice)
+            newTransactions.append(min(sellPrice, maxTransactionValue))
         petData.transactions = newTransactions
 
         if len(petData.transactions) > 0:
