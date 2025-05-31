@@ -121,5 +121,7 @@ def update_data(database: Session = Depends(db.getDatabase)):
                 itemData.value = data.baseValue
             database.add(itemData)
         itemData.itemType = "pet"
+        print(itemData.itemType)
+        itemData.baseValue = data.baseValue
         itemData.count = data.count
     database.commit()

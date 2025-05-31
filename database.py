@@ -58,6 +58,7 @@ class ItemData(Base):
     itemType = sa.Column(sa.String(50), default="pet")
     count = sa.Column(sa.Integer, default=0)
     value = sa.Column(sa.Float, default=0)
+    baseValue = sa.Column(sa.Float, default=0)
     transactions = sa.Column(sa.JSON, default=[])
 
 
