@@ -22,24 +22,6 @@ def getDatabase():
     finally:
         db.close()
 
-class PetDataModel(BaseModel):
-    id: str
-    count: int
-    baseValue: float
-    transactions: list[Annotated[float, Field(strict=True, gt=0)]]
-
-class UpdateDataModel(BaseModel):
-    data: list[PetDataModel]
-
-class PetData(Base):
-    __tablename__ = 'PetData'
-
-    id = sa.Column(sa.String(50), primary_key=True)
-    count = sa.Column(sa.Integer, default=0)
-    value = sa.Column(sa.Float, default=0)
-    baseValue = sa.Column(sa.Float, default=0)
-    transactions = sa.Column(sa.JSON, default=[])
-
 
 class ItemDataModel(BaseModel):
     id: str

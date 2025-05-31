@@ -23,41 +23,6 @@ app = FastAPI(
     ]
 )
 
-@app.post("/pet_data")
-def update_data(data: db.UpdateDataModel, database: Session = Depends(db.getDatabase)):
-    for newPetData in data.data:
-        petData = database.query(db.PetData).filter(db.PetData.id == newPetData.id).one_or_none()
-        if petData is None:
-            petData = db.PetData(id = newPetData.id)
-            if newPetData.baseValue > 0:
-                petData.transactions = [newPetData.baseValue]
-            database.add(petData)
-
-        petData.baseValue = newPetData.baseValue
-        petData.count += newPetData.count
-
-        newTransactions = petData.transactions.copy()
-
-        for i in range(len(newTransactions)+1-100):
-            newTransactions.pop(0)
-        maxTransactionValue = (petData.value > 0) and (petData.value * 1.2) or float('inf')
-        for sellPrice in newPetData.transactions:
-            newTransactions.append(min(sellPrice, maxTransactionValue))
-        petData.transactions = newTransactions
-
-        if len(petData.transactions) > 0:
-            newValue = 0
-            for sellPrice in petData.transactions:
-                newValue += sellPrice
-            newValue /= len(petData.transactions)
-            petData.value = newValue
-
-    database.commit()
-   
-@app.get("/pet_data")
-def update_data(database: Session = Depends(db.getDatabase)):
-    return database.query(db.PetData).all()
-
 @app.post("/item_data")
 def update_data(data: db.NewDataModel, database: Session = Depends(db.getDatabase)):
     for newData in data.data:
@@ -108,20 +73,3 @@ def update_data(data: db.NewDataModel, database: Session = Depends(db.getDatabas
 @app.get("/item_data")
 def update_data(database: Session = Depends(db.getDatabase)):
     return database.query(db.ItemData).all()
-
-@app.get("/migrate_data")
-def update_data(database: Session = Depends(db.getDatabase)):
-    d = database.query(db.PetData).all()
-    for data in d:
-        itemData = database.query(db.ItemData).filter(db.ItemData.id == data.id).one_or_none()
-        if itemData is None:
-            itemData = db.ItemData(id = data.id)
-            if data.baseValue > 0:
-                itemData.transactions = [[0, data.baseValue]]
-                itemData.value = data.baseValue
-            database.add(itemData)
-        itemData.itemType = "pet"
-        print(itemData.itemType)
-        itemData.baseValue = data.baseValue
-        itemData.count = data.count
-    database.commit()
