@@ -43,6 +43,7 @@ class PetData(Base):
 
 class ItemDataModel(BaseModel):
     id: str
+    itemType: str
     count: int
     baseValue: float
     transactions: list[Annotated[list, [Annotated[float, Field(strict=True, gt=0)], Annotated[float, Field(strict=True, gt=0)]]]]
@@ -54,6 +55,7 @@ class ItemData(Base):
     __tablename__ = 'ItemData'
 
     id = sa.Column(sa.String(50), primary_key=True)
+    itemType = sa.Column(sa.String(50), default="pet")
     count = sa.Column(sa.Integer, default=0)
     value = sa.Column(sa.Float, default=0)
     transactions = sa.Column(sa.JSON, default=[])
