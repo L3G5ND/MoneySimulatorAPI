@@ -45,6 +45,7 @@ def update_data(data: db.NewDataModel, database: Session = Depends(db.getDatabas
             price = transactionInfo[1]
 
             for i in range(len(newTransactions)):
+                print(len(newTransactions), i)
                 if userId == newTransactions[i][0]:
                     newTransactions.pop(i)
 
