@@ -46,7 +46,7 @@ def update_data(data: db.NewDataModel, database: Session = Depends(db.getDatabas
 
             for i in range(len(newTransactions)):
                 print(len(newTransactions), i)
-                if userId == newTransactions[i][0]:
+                if userId == newTransactions[i-1][0]:
                     newTransactions.pop(i)
 
             value = 0
