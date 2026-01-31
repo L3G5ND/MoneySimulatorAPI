@@ -28,7 +28,7 @@ def update_data(data: db.NewDataModel, database: Session = Depends(db.getDatabas
     for newData in data.data:
         itemData = database.query(db.ItemData).filter(db.ItemData.id == newData.id).one_or_none()
         if itemData is None:
-            itemData = db.ItemData(id = newData.id)
+            itemData = db.ItemData(id = newData.id, itemType = newData.itemType)
             if newData.baseValue > 0:
                 itemData.transactions = [[0, newData.baseValue]]
                 itemData.value = newData.baseValue
@@ -52,12 +52,13 @@ def update_data(data: db.NewDataModel, database: Session = Depends(db.getDatabas
             value = 0
             for transactionInfo in newTransactions:
                 value += transactionInfo[1]
-            value /= len(newTransactions)
+            if len(newTransactions) > 0:
+                value /= len(newTransactions)
 
             for i in range(len(newTransactions)+1-100):
                 newTransactions.pop(0)
 
-            newTransactions.append([userId, min(price, (value > 0) and (value * 1.25) or float('inf'))])
+            newTransactions.append([userId, min(price, (value > 0) and (value * 2) or float('inf'))])
 
         itemData.transactions = newTransactions
 

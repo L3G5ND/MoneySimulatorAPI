@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy_utils import force_instant_defaults
 from pydantic import BaseModel, Field
 from typing import Annotated
+from enum import Enum
 import dotenv
 import os
 
@@ -22,10 +23,15 @@ def getDatabase():
     finally:
         db.close()
 
+ItemType =  Enum(
+    'ItemType',
+    ((value, value) for value in ["Pet", "Item"]),
+    type=str
+)
 
 class ItemDataModel(BaseModel):
     id: str
-    itemType: str
+    itemType: ItemType
     count: int
     baseValue: float
     transactions: list[Annotated[list, [Annotated[float, Field(strict=True, gt=0)], Annotated[float, Field(strict=True, gt=0)]]]]
@@ -37,7 +43,7 @@ class ItemData(Base):
     __tablename__ = 'ItemData'
 
     id = sa.Column(sa.String(50), primary_key=True)
-    itemType = sa.Column(sa.String(50), default="pet")
+    itemType = sa.Column(sa.String(50), default="Pet")
     count = sa.Column(sa.Integer, default=0)
     value = sa.Column(sa.Float, default=0)
     baseValue = sa.Column(sa.Float, default=0)
