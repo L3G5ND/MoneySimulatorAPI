@@ -25,7 +25,7 @@ def getDatabase():
 
 ItemType =  Enum(
     'ItemType',
-    ((value, value) for value in ["Pet", "Item"]),
+    ((value, value) for value in ["Pet", "Boost"]),
     type=str
 )
 
